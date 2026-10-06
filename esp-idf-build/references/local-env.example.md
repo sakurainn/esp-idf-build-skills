@@ -32,8 +32,8 @@
 
 | 版本 | 激活脚本 | 备注 |
 |---|---|---|
-| `<v6.0.2>` | `. <C:\Espressif\tools\Microsoft.v6.0.2.PowerShell_profile.ps1>` | `<例如：自带 Mbed TLS 4.1.0>` |
-| `<v5.5.4>` | `. "<C:\Toolchain\esp\v5.5.4\esp-idf\export.ps1">` | `<需自行保证 IDF_TOOLS_PATH 正确>` |
+| `<v6.0.2>` | `. <EIM 安装根目录>\Microsoft.v6.0.2.PowerShell_profile.ps1` | `<例如：自带 Mbed TLS 4.1.0>` |
+| `<v5.5.4>` | `. "<克隆根目录>\v5.5.4\esp-idf\export.ps1"` | `<需自行保证 IDF_TOOLS_PATH 正确>` |
 | `<v5.3.5>` | `. "<...\export.ps1">` | `<...>` |
 
 > 注意个别安装的 profile 文件名不带 `v`（例如 `Microsoft.5.3.4.PowerShell_profile.ps1`），别按规律猜。

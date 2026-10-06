@@ -106,25 +106,27 @@ Copy-Item "$env:TEMP\esp-idf-build-skills\esp-idf-build" "$env:USERPROFILE\.agen
 
 两个脚本做同一件事：**按可靠性顺序探测 ESP-IDF → 在同一会话内激活 → 在工程目录执行指定动作**。工程目录必须是含顶层 `CMakeLists.txt` 的那个目录，不是 `main/`。
 
-**Windows PowerShell：**
+**Windows PowerShell**（在 PowerShell 会话里直接调用即可，Windows PowerShell 5.1 与 PowerShell 7 都能跑）：
 
 ```powershell
 # 先干跑：只打印会选中哪个环境，不执行任何命令（强烈建议第一步）
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -DryRun
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -DryRun
 
 # 构建（用工程 build/ 里记录的版本）
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp
 
 # 钉住 IDF 目录 + 换版本前先全清
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -IdfPath C:\Toolchain\esp\v5.4.2\esp-idf -Clean
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -IdfPath C:\Espressif\frameworks\esp-idf-v5.4.2 -Clean
 
 # 烧录并看日志
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Port COM5 -FlashMonitor
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Port COM5 -FlashMonitor
 
 # 换目标芯片 / 只看体积
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Action set-target -Target esp32s3
-pwsh -File .\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Action size-components
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Action set-target -Target esp32s3
+.\esp-idf-build\scripts\build.ps1 -Project D:\work\myapp -Action size-components
 ```
+
+> 从 cmd / Git Bash 等非 PowerShell 环境调用时，用 `powershell -ExecutionPolicy Bypass -File .\esp-idf-build\scripts\build.ps1 ...`；装了 PowerShell 7 才用 `pwsh -File ...`。**Windows 自带的是 Windows PowerShell 5.1，`pwsh` 不一定存在**（先用 `Get-Command pwsh` 确认）。
 
 **Linux / macOS：**
 
@@ -168,7 +170,7 @@ bash esp-idf-build/scripts/build.sh -h
 
 前四项是"有依据"的来源；一旦落到扫描盲选，脚本会打印 `picked from: probe:...` 并给出 `WARNING`，建议用 `-IdfPath` / `--idf-path` 钉死版本。
 
-**退出码：** 成功 `0`；用法错误 / 找不到可用环境（`build.sh` 的 `die`）`2`；`idf.py` 返回非零则原样向上传播（`build.ps1` 为抛错退出 `1`）。
+**退出码（已实测）：** `build.sh`——成功 `0`，用法/环境错误 `2`（`die`），`idf.py` 非零则原样传播；`build.ps1`——成功 `0`，任何失败（找不到可用环境、参数组合不合法、`idf.py` 非零）抛错退出 `1`。
 
 ### 3. 本机环境速查（可选）
 
@@ -179,7 +181,7 @@ bash esp-idf-build/scripts/build.sh -h
 ## 前置要求
 
 - 已安装 ESP-IDF（任意一种布局），或 `idf.py` 已在 PATH 上
-- Windows：PowerShell 5.1+（`build.ps1` 声明了 `#requires -Version 5.1`）
+- Windows：PowerShell 5.1+（`build.ps1` 声明了 `#requires -Version 5.1`；系统自带的 Windows PowerShell 5.1 就够用，**不需要另外安装 PowerShell 7**）
 - Linux / macOS：bash；`python3` 可选（有则用它解析工程 JSON，没有则回退到 `sed`）
 - 脚本不需要管理员权限、不联网、只读取工程与 IDF 目录
 
@@ -193,7 +195,7 @@ npx -y skills@latest add sakurainn/esp-idf-build-skills --list
 Test-Path "$env:USERPROFILE\.agents\skills\esp-idf-build\SKILL.md"   # -> True
 
 # 3) 脚本能否干跑（不会真的构建）
-pwsh -File "$env:USERPROFILE\.agents\skills\esp-idf-build\scripts\build.ps1" -Project <你的工程> -DryRun
+& "$env:USERPROFILE\.agents\skills\esp-idf-build\scripts\build.ps1" -Project <你的工程> -DryRun
 ```
 
 干跑预期输出：

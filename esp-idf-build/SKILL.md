@@ -186,20 +186,22 @@ v6.0 系列内置 **Mbed TLS 4.x**，并建立在 PSA Crypto 之上，部分旧 
 `scripts/build.ps1`（Windows PowerShell）：
 
 ```powershell
+# 在 PowerShell 会话里直接调用（Windows PowerShell 5.1 与 PowerShell 7 均可；
+# Windows 自带的是 5.1，pwsh 不一定存在，跨 shell 调用用 powershell -File）
 # 用工程 build/ 里记录的版本构建
-pwsh -File scripts/build.ps1 -Project D:\work\myapp
+.\scripts\build.ps1 -Project D:\work\myapp
 
 # 显式指定 IDF 目录
-pwsh -File scripts/build.ps1 -Project D:\work\myapp -IdfPath C:\Espressif\frameworks\esp-idf-v5.3.2
+.\scripts\build.ps1 -Project D:\work\myapp -IdfPath C:\Espressif\frameworks\esp-idf-v5.3.2
 
 # 换版本前先全清
-pwsh -File scripts/build.ps1 -Project D:\work\myapp -IdfPath D:\idf\esp-idf -Clean
+.\scripts\build.ps1 -Project D:\work\myapp -IdfPath D:\idf\esp-idf -Clean
 
 # 烧录 + 看日志
-pwsh -File scripts/build.ps1 -Project D:\work\myapp -Port COM5 -FlashMonitor
+.\scripts\build.ps1 -Project D:\work\myapp -Port COM5 -FlashMonitor
 
 # 只看会选中哪个环境，不执行
-pwsh -File scripts/build.ps1 -Project D:\work\myapp -DryRun
+.\scripts\build.ps1 -Project D:\work\myapp -DryRun
 ```
 
 `scripts/build.sh`（Linux / macOS，bash）：
