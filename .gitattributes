@@ -1,0 +1,6 @@
+# Store LF in the repository and check out LF everywhere: build.sh stays runnable on
+# Linux/macOS, and the ASCII-only .ps1 stays byte-stable on every platform (Windows
+# PowerShell 5.1 reads non-ASCII scripts as ANSI, which can corrupt quoting).
+* text=auto eol=lf
+*.ps1 text eol=lf
+*.sh  text eol=lf
